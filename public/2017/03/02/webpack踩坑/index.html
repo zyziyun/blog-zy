@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端,打包工具,webpack," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="运行效率
+如果项目是多入口配置，在本地开发阶段不需要每次都跑全部的
+可以获取到运行命令行参数决定，跑哪些页面，加快速度
+process.env.npm_config_argv或者使用yargs这个npm包获取命令行传入的参数
+
+1234567var scriptArg = process.env.npm_config_argv &amp;amp;&amp;amp; JSON.parse(process.env.n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack踩坑">
+<meta property="og:url" content="http://yoursite.com/2017/03/02/webpack踩坑/index.html">
+<meta property="og:site_name" content="ziyun">
+<meta property="og:description" content="运行效率
+如果项目是多入口配置，在本地开发阶段不需要每次都跑全部的
+可以获取到运行命令行参数决定，跑哪些页面，加快速度
+process.env.npm_config_argv或者使用yargs这个npm包获取命令行传入的参数
+
+1234567var scriptArg = process.env.npm_config_argv &amp;amp;&amp;amp; JSON.parse(process.env.n">
+<meta property="og:image" content="http://yoursite.com/2017/03/02/webpack踩坑/3.jpeg">
+<meta property="og:image" content="http://yoursite.com/2017/03/02/webpack踩坑/7.jpeg">
+<meta property="og:updated_time" content="2017-03-04T15:41:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack踩坑">
+<meta name="twitter:description" content="运行效率
+如果项目是多入口配置，在本地开发阶段不需要每次都跑全部的
+可以获取到运行命令行参数决定，跑哪些页面，加快速度
+process.env.npm_config_argv或者使用yargs这个npm包获取命令行传入的参数
+
+1234567var scriptArg = process.env.npm_config_argv &amp;amp;&amp;amp; JSON.parse(process.env.n">
+<meta name="twitter:image" content="http://yoursite.com/2017/03/02/webpack踩坑/3.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/02/webpack踩坑/"/>
+
+
+
+
+
+  <title> webpack踩坑 | ziyun </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?63e4ec0ae2955c8a2087a6194757b136";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ziyun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ziyun‘s study blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/02/webpack踩坑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zi Yun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/photo.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ziyun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack踩坑
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-02T17:36:26+08:00">
+                2017-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/02/webpack踩坑/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/02/webpack踩坑/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="运行效率"><a href="#运行效率" class="headerlink" title="运行效率"></a>运行效率</h2><ul>
+<li>如果项目是多入口配置，在本地开发阶段不需要每次都跑全部的</li>
+<li>可以获取到运行命令行参数决定，跑哪些页面，加快速度</li>
+<li>process.env.npm_config_argv或者使用yargs这个npm包获取命令行传入的参数</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scriptArg = process.env.npm_config_argv &amp;&amp; <span class="built_in">JSON</span>.parse(process.env.npm_config_argv);</div><div class="line"><span class="keyword">var</span> targetDir = scriptArg &amp;&amp; scriptArg.original[<span class="number">2</span>] &amp;&amp; scriptArg.original[<span class="number">2</span>].substr(<span class="number">1</span>) || <span class="string">''</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> js = glob.sync(<span class="string">'./'</span> + (targetDir || <span class="string">'**'</span>) + <span class="string">'/*.js'</span>).reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, curr</span>) </span>&#123;</div><div class="line">    prev[curr.slice(<span class="number">6</span>, <span class="number">-3</span>)] = [<span class="string">'./'</span> + curr.substr(<span class="number">6</span>)];</div><div class="line">    <span class="keyword">return</span> prev;</div><div class="line">&#125;, &#123;&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> argv = <span class="built_in">require</span>(<span class="string">'yargs'</span>).argv;</div><div class="line"><span class="keyword">var</span> list = argv._[<span class="number">0</span>] || <span class="string">'*'</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> js = glob.sync(<span class="string">'./'</span> + list + <span class="string">'/*.js'</span>).reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, curr</span>) </span>&#123;</div><div class="line">    prev[curr.slice(<span class="number">6</span>, <span class="number">-3</span>)] = [curr];</div><div class="line">    <span class="keyword">return</span> prev;</div><div class="line">&#125;, &#123;&#125;);</div></pre></td></tr></table></figure>
+<ul>
+<li>process.env.npm_config_argv：在使用yarn run xxx的时候不能获取到参数，在使用npm run xxx的时候可以获取到</li>
+<li>yargs这个包是都可以获取到的</li>
+</ul>
+<h2 id="路径问题"><a href="#路径问题" class="headerlink" title="路径问题"></a>路径问题</h2><ul>
+<li>问题描述：在上线和测试环境下代码发到cdn上，静态资源和页面地址不在一处，需要配置不同的前缀地址，才能引入线上script</li>
+<li>通过<strong>output -&gt; publicPath</strong> 根据不同的环境变量变更path路径，解决加载问题</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">output: &#123;</div><div class="line">	<span class="attr">path</span>: path.resolve(<span class="string">'./build'</span>),</div><div class="line">	<span class="attr">filename</span>: <span class="string">'[name].js'</span>,</div><div class="line">	<span class="attr">publicPath</span>: env === <span class="string">'development'</span></div><div class="line">		? <span class="string">'/'</span> : (</div><div class="line">			env === <span class="string">'production'</span></div><div class="line">				? <span class="string">'//xxx.production.com/'</span></div><div class="line">				: <span class="string">'//xxx.test.com/'</span></div><div class="line">		)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="htmlPlugin"><a href="#htmlPlugin" class="headerlink" title="htmlPlugin"></a>htmlPlugin</h2><h3 id="普通配置"><a href="#普通配置" class="headerlink" title="普通配置"></a>普通配置</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> htmlFiles = glob.sync(<span class="string">'./**/*.html'</span>);</div><div class="line"><span class="keyword">var</span> html = htmlFiles.map(<span class="function"><span class="keyword">function</span> (<span class="params">item</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(item.substr(<span class="number">6</span>));</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</div><div class="line">        <span class="attr">data</span>: &#123;</div><div class="line">            <span class="attr">build</span>: <span class="literal">true</span></div><div class="line">        &#125;,</div><div class="line">        <span class="attr">filename</span>: item.substr(<span class="number">6</span>),</div><div class="line">        <span class="attr">template</span>: <span class="string">'ejs-compiled!'</span> + item,</div><div class="line">        <span class="attr">inject</span>: <span class="literal">false</span>,</div><div class="line">        <span class="attr">minify</span>: &#123;</div><div class="line">            <span class="attr">removeComments</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">collapseWhitespace</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">preserveLineBreaks</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">collapseInlineTagWhitespace</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">collapseBooleanAttributes</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">removeRedundantAttributes</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">useShortDoctype</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">caseSensitive</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">minifyJS</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">minifyCSS</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">quoteCharacter</span>: <span class="string">'"'</span></div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<ul>
+<li>把html 连接到webpack的plugin属性上（concat）一个配置只能针对一个文件</li>
+<li>data的内容，可以在template里获取到然后做相应的改动</li>
+<li>filename：输出html的名称，可以带路径</li>
+<li>template: 模板名称及使用什么编译器 ejs-compiled可以使用ejs语法</li>
+<li>inject：是否把所有静态资源自动添加到html里，这里不使用，目前的模板配置是直接引入了入口的文件，后面在回调里添加hash实现，下图是模板文件：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">  &lt;%- include ../header.html -%&gt;</div><div class="line">  &lt;title&gt;&lt;/title&gt;</div><div class="line">  &lt;meta http-equiv="Cache-Control" content="no-cache"&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">  &lt;div id="mount"&gt;&lt;/div&gt;</div><div class="line">  &lt;script src="./xxx.js" defer&gt;&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>可以使用ejs的语法</li>
+<li>minify：压缩模板配置<ul>
+<li>removeComments：删除注释</li>
+<li>collapseWhitespace：删除多余的空格</li>
+<li>preserveLineBreaks：保留每个标签tag的换行符</li>
+<li>collapseInlineTagWhitespace：不保留行内元素两边的空格</li>
+<li>collapseBooleanAttributes：使input的一些的布尔值的属性合并，不写等于了，例如：disabled</li>
+<li>removeRedundantAttributes：删除多余的标签，例如没有赋值的style，class等</li>
+<li>useShortDoctype：替换成较短的html5 doctype</li>
+<li>caseSensitive：区分大小写的方式处理自定义标签</li>
+<li>minifyJS：行内scripts标签，或者attribute里的是否压缩</li>
+<li>minifyCSS：行内style标签，或者attribute里的是否压缩</li>
+<li>quoteCharacter：对于attribute用什么符号</li>
+</ul>
+</li>
+</ul>
+<h3 id="plugin完成后的一些操作"><a href="#plugin完成后的一些操作" class="headerlink" title="plugin完成后的一些操作"></a>plugin完成后的一些操作</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">function () &#123;</div><div class="line">	this.plugin('done', function (stats) &#123;</div><div class="line">		var replaceInFile = function (filePath, toReplace, replacement) &#123;</div><div class="line">			var str = fs.readFileSync(filePath, 'utf8');</div><div class="line">			var out = str.replace(toReplace, replacement);</div><div class="line">			fs.writeFileSync(filePath, out);</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		htmlFiles.map(function (item) &#123;</div><div class="line">			replaceInFile(path.join(config.build.assetsRoot, item.substr(6)),</div><div class="line">				/(src|href)=\"([\/\w\.]+\.(js|css))\"/g,</div><div class="line">				function ($0, $1, $2) &#123;</div><div class="line">					var file = $2.split('.');</div><div class="line">					file.splice(-1, 0, stats.hash);</div><div class="line">					file = file.join('.');</div><div class="line">					return $1 + '="' + file + '"';</div><div class="line">				&#125;</div><div class="line">			);</div><div class="line">		&#125;);</div><div class="line">	&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>plugin执行完后执行替换html的js引用，增加对应的hash值，stats.hash</li>
+<li>获取到数据流后通过正则匹配，替换<h3 id="参考文档："><a href="#参考文档：" class="headerlink" title="参考文档："></a>参考文档：</h3><a href="http://perfectionkills.com/experimenting-with-html-minifier/#collapse_whitespace" target="_blank" rel="external">http://perfectionkills.com/experimenting-with-html-minifier/#collapse_whitespace</a><br><a href="http://perfectionkills.com/experimenting-with-html-minifier/#remove_comments" target="_blank" rel="external">http://perfectionkills.com/experimenting-with-html-minifier/#remove_comments</a><br><a href="http://perfectionkills.com/experimenting-with-html-minifier/#collapse_boolean_attributes" target="_blank" rel="external">http://perfectionkills.com/experimenting-with-html-minifier/#collapse_boolean_attributes</a><br><a href="http://perfectionkills.com/experimenting-with-html-minifier/#use_short_doctype" target="_blank" rel="external">http://perfectionkills.com/experimenting-with-html-minifier/#use_short_doctype</a><br><a href="https://github.com/kangax/html-minifier#options-quick-reference" target="_blank" rel="external">https://github.com/kangax/html-minifier#options-quick-reference</a><br><a href="https://github.com/jantimon/html-webpack-plugin" target="_blank" rel="external">https://github.com/jantimon/html-webpack-plugin</a></li>
+</ul>
+<h2 id="sass-loader"><a href="#sass-loader" class="headerlink" title="sass-loader"></a>sass-loader</h2><p>设置import相对路径，不过最后引用的时候用<strong>~</strong>开头，node_modules里的scss引用可以直接相对”~”引用</p>
+<img src="/2017/03/02/webpack踩坑/3.jpeg" alt="3.jpeg" title="">
+<p><a href="https://github.com/webpack-contrib/sass-loader#imports" target="_blank" rel="external">https://github.com/webpack-contrib/sass-loader#imports</a></p>
+<h2 id="resolve"><a href="#resolve" class="headerlink" title="resolve"></a>resolve</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">	<span class="attr">extensions</span>: [<span class="string">''</span>, <span class="string">'.js'</span>, <span class="string">'.vue'</span>],</div><div class="line">	<span class="attr">fallback</span>: [path.join(__dirname, <span class="string">'../node_modules'</span>)],</div><div class="line">	<span class="attr">alias</span>: &#123;</div><div class="line">		<span class="string">'vue$'</span>: <span class="string">'vue/dist/vue'</span>,</div><div class="line">		<span class="string">'scss'</span>: path.resolve(__dirname, <span class="string">'../src/modules/scss'</span>),</div><div class="line">		<span class="string">'vue-directive'</span>: path.resolve(__dirname, <span class="string">'../src/modules/vue-directive'</span>),</div><div class="line">		<span class="string">'request'</span>: path.resolve(__dirname, <span class="string">'../src/modules/request'</span>),</div><div class="line">		<span class="string">'common'</span>: path.resolve(__dirname, <span class="string">'../src/modules/common'</span>),</div><div class="line">		<span class="string">'vue-component'</span>: path.resolve(__dirname, <span class="string">'../src/modules/vue-component'</span>),</div><div class="line">		<span class="string">'vue-fragment'</span>: path.resolve(__dirname, <span class="string">'../src/modules/vue-fragment'</span>)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>extensions：扩展名</li>
+<li>fallback：</li>
+<li>alias：别名，具体定义一个别名的路径，方便引入modules</li>
+</ul>
+<img src="/2017/03/02/webpack踩坑/7.jpeg" alt="7.jpeg" title="">
+<p>webpack2把root，fallback迁移到了modules的配置里，告诉webpack解析的搜索路径<br>Explicit is better than implicit<br>alias清晰的比modules的好，效率？？</p>
+<h2 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h2><ul>
+<li>背景：本地开发嵌套iframe的页面的时候，两个项目的端口号不统一，导致iframe同源策略不允许互相操作跳转</li>
+<li>解决：配置到同一端口号的域名上。“devServer.proxy”</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">devServer: &#123;</div><div class="line">	<span class="attr">host</span>: <span class="string">'localhost'</span>,</div><div class="line">	<span class="attr">port</span>: <span class="number">8080</span>,</div><div class="line">	<span class="attr">historyApiFallback</span>: <span class="literal">true</span>,</div><div class="line">	<span class="attr">inline</span>: <span class="literal">true</span>,</div><div class="line">	<span class="attr">hot</span>: <span class="literal">true</span>,</div><div class="line">	<span class="attr">proxy</span>: &#123;</div><div class="line">		<span class="string">'/pages'</span>: <span class="string">'http://localhost:8899'</span></div><div class="line">	&#125;,</div><div class="line">	<span class="attr">stats</span>: &#123;</div><div class="line">		<span class="attr">children</span>: <span class="literal">false</span>,</div><div class="line">		<span class="attr">chunks</span>: <span class="literal">false</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
+<li>路径是否正确，publicPath，path，如果是相对路径相对哪里，最好配置成path.resolve(__dirname, xxx)的形式</li>
+<li>如果用的别人配置好的多文件的配置，检查loader是否有重复的，可能出现多个loader配置重复的问题，等于是模块解析了2次，会报错</li>
+<li>拆分模块的情况下，一定要配置publicPath，确定异步加载的模块地址</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/打包工具/" rel="tag"># 打包工具</a>
+          
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/02/flexbox的基本使用及流布局/" rel="prev" title="flexbox的基本使用及流布局">
+                flexbox的基本使用及流布局 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/02/webpack踩坑/"
+           data-title="webpack踩坑" data-url="http://yoursite.com/2017/03/02/webpack踩坑/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/photo.jpeg"
+               alt="Zi Yun" />
+          <p class="site-author-name" itemprop="name">Zi Yun</p>
+           
+              <p class="site-description motion-element" itemprop="description">ziyun‘s blog | 前端 | JavaScript | webpack | CSS</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行效率"><span class="nav-number">1.</span> <span class="nav-text">运行效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路径问题"><span class="nav-number">2.</span> <span class="nav-text">路径问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#htmlPlugin"><span class="nav-number">3.</span> <span class="nav-text">htmlPlugin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通配置"><span class="nav-number">3.1.</span> <span class="nav-text">普通配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plugin完成后的一些操作"><span class="nav-number">3.2.</span> <span class="nav-text">plugin完成后的一些操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档："><span class="nav-number">3.3.</span> <span class="nav-text">参考文档：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sass-loader"><span class="nav-number">4.</span> <span class="nav-text">sass-loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resolve"><span class="nav-number">5.</span> <span class="nav-text">resolve</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置代理"><span class="nav-number">6.</span> <span class="nav-text">配置代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">7.</span> <span class="nav-text">注意点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zi Yun</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zyziyun"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

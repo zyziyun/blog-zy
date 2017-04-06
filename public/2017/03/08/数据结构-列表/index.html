@@ -1,0 +1,796 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="读书笔记," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="《数据结构与算法JavaScript描述》读书笔记之二
+列表
+未完
+
+chapter-3 列表
+列表是一组有序的数据，每个列表中的数据项称为元素。
+在JavaScript中，列表中元素可以是任意数据类型。个数不限，但是使用中受到内存的限制
+
+适合列表的数据结构
+数据存储的顺序不重要
+不必在一个很长的序列中查找元素
+列表中12345678910111213141516171819202122232">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构-列表">
+<meta property="og:url" content="http://yoursite.com/2017/03/08/数据结构-列表/index.html">
+<meta property="og:site_name" content="ziyun">
+<meta property="og:description" content="《数据结构与算法JavaScript描述》读书笔记之二
+列表
+未完
+
+chapter-3 列表
+列表是一组有序的数据，每个列表中的数据项称为元素。
+在JavaScript中，列表中元素可以是任意数据类型。个数不限，但是使用中受到内存的限制
+
+适合列表的数据结构
+数据存储的顺序不重要
+不必在一个很长的序列中查找元素
+列表中12345678910111213141516171819202122232">
+<meta property="og:image" content="http://yoursite.com/2017/03/08/数据结构-列表/1.jpeg">
+<meta property="og:updated_time" content="2017-03-09T16:14:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构-列表">
+<meta name="twitter:description" content="《数据结构与算法JavaScript描述》读书笔记之二
+列表
+未完
+
+chapter-3 列表
+列表是一组有序的数据，每个列表中的数据项称为元素。
+在JavaScript中，列表中元素可以是任意数据类型。个数不限，但是使用中受到内存的限制
+
+适合列表的数据结构
+数据存储的顺序不重要
+不必在一个很长的序列中查找元素
+列表中12345678910111213141516171819202122232">
+<meta name="twitter:image" content="http://yoursite.com/2017/03/08/数据结构-列表/1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/08/数据结构-列表/"/>
+
+
+
+
+
+  <title> 数据结构-列表 | ziyun </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?63e4ec0ae2955c8a2087a6194757b136";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ziyun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ziyun‘s study blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/08/数据结构-列表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zi Yun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/photo.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ziyun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据结构-列表
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-08T00:14:19+08:00">
+                2017-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构与算法JavaScript描述/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法JavaScript描述</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/08/数据结构-列表/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/08/数据结构-列表/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>《数据结构与算法JavaScript描述》读书笔记之二</li>
+<li>列表</li>
+<li>未完</li>
+</ul>
+<h2 id="chapter-3-列表"><a href="#chapter-3-列表" class="headerlink" title="chapter-3 列表"></a>chapter-3 列表</h2><ul>
+<li>列表是一组有序的数据，每个列表中的数据项称为元素。</li>
+<li>在JavaScript中，列表中元素可以是任意数据类型。个数不限，但是使用中受到<strong>内存的限制</strong></li>
+</ul>
+<h3 id="适合列表的数据结构"><a href="#适合列表的数据结构" class="headerlink" title="适合列表的数据结构"></a>适合列表的数据结构</h3><ul>
+<li>数据存储的顺序不重要</li>
+<li>不必在一个很长的序列中查找元素</li>
+<li>列表中<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### 特性</div><div class="line">- 空列表（不含元素）</div><div class="line">- 列表的length：包含的元素个数</div><div class="line">- 列表末尾append一个元素，也可以在给定的元素后或起始位置insert一个元素</div><div class="line">- remove删除元素</div><div class="line">- clear清空列表元素</div><div class="line">- toString显示列表中所有元素</div><div class="line">- getElement显示当前元素</div><div class="line">- 描述元素位置的属性：front，end前后</div><div class="line">- next()从当前元素移动到下一个元素</div><div class="line">- prev()从当前元素移动到当前元素的前一个元素</div><div class="line">- moveTo(n)直接移动到指定位置，移动到第N个位置</div><div class="line">- currPos列表当前位置</div><div class="line"></div><div class="line">### 抽象数据类型定义</div><div class="line"></div><div class="line">#### 属性</div><div class="line">- listSize 元素个数</div><div class="line">- pos 当前位置</div><div class="line"></div><div class="line">#### 方法</div><div class="line">- length 返回元素个数</div><div class="line">- clear 清空列表中的所有元素</div><div class="line">- toString 返回列表字符串形式</div><div class="line">- getElement 返回当前位置元素</div><div class="line">- insert 在现有元素后插入新元素</div><div class="line">- append 列表末尾添加新元素</div><div class="line">- remove 删除某元素</div><div class="line">- front 当前位置移动到第一个元素</div><div class="line">- end 移动到最后一个元素</div><div class="line">- prev 后移一位</div><div class="line">- next 前移一位</div><div class="line">- currPos 返回列表当前位置</div><div class="line">- moveTo 当前位置移动到指定位置</div><div class="line"></div><div class="line">### 实现</div><div class="line">```javascript</div><div class="line">function List () &#123;</div><div class="line">    this.listSize = 0;</div><div class="line">    this.pos = 0;</div><div class="line">    // 保存列表元素</div><div class="line">    this.dataStore = [];</div><div class="line">&#125;</div><div class="line">// 实现一个列表</div><div class="line">List.prototype = &#123;</div><div class="line">    constructor: List,</div><div class="line">    // 清空</div><div class="line">    clear: function () &#123;</div><div class="line">        delete this.dataStore;</div><div class="line">        //创建空数组， 设置新的空列表</div><div class="line">        this.dataStore.length = 0;</div><div class="line">        this.listSize = this.pos = 0;</div><div class="line">    &#125;,</div><div class="line">    // 辅助方法</div><div class="line">    find: function (element) &#123;</div><div class="line">        // 是否可以用indexOf代替？？</div><div class="line">        for (var i = 0; i &lt; this.dataStore.length;i++)&#123;</div><div class="line">            if (this.dataStore[i] === element) &#123;</div><div class="line">                return i;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 错误校验</div><div class="line">        return -1;</div><div class="line">    &#125;,</div><div class="line">    // 显示列表元素</div><div class="line">    toString: function () &#123;</div><div class="line">        // 目的是显示当前状态</div><div class="line">        return this.dataStore;</div><div class="line">    &#125;,</div><div class="line">    // 插入</div><div class="line">    insert: function (element, after) &#123;</div><div class="line">        var insertPos = this.find(after);</div><div class="line">        if (insertPos &gt; -1) &#123;</div><div class="line">            this.dataStore.splice(insertPos + 1, 0, element);</div><div class="line">            this.listSize++;</div><div class="line">            return true;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;,</div><div class="line">    // 给列表添加元素</div><div class="line">    append: function (element) &#123;</div><div class="line">        // 新元素就位后，变量listSize加1</div><div class="line">        this.dataStore[this.listSize++] = element;</div><div class="line">    &#125;,</div><div class="line">    // 从列表中删除元素</div><div class="line">    /*  1. 先找到该元素（find）</div><div class="line">        2. 然后删除他，(splice)</div><div class="line">        3. 调整底层数组对象以填补删除该元素的空白*/</div><div class="line">    remove: function (element) &#123;</div><div class="line">        var foundAt = this.find(element);</div><div class="line">        if (foundAt &gt; -1) &#123;</div><div class="line">            this.dataStore.splice(foundAt, 1);</div><div class="line">            this.listSize--;</div><div class="line">            return true;</div><div class="line">        &#125;</div><div class="line">        return false;</div><div class="line">    &#125;,</div><div class="line">    // 移动到第一个元素</div><div class="line">    front: function () &#123;</div><div class="line">        this.pos = 0;</div><div class="line">    &#125;,</div><div class="line">    // 移动到最后一个元素上</div><div class="line">    end: function () &#123;</div><div class="line">        this.pos = this.listSize - 1;</div><div class="line">    &#125;,</div><div class="line">    // 向前一个</div><div class="line">    prev: function () &#123;</div><div class="line">        if (this.pos &gt; 0) &#123;</div><div class="line">            this.pos--;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    // 向后移动一个元素</div><div class="line">    next: function () &#123;</div><div class="line">        if (this.pos &lt; this.listSize - 1) &#123;</div><div class="line">            this.pos ++;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    // 元素个数</div><div class="line">    length: function () &#123;</div><div class="line">        return this.listSize;</div><div class="line">    &#125;,</div><div class="line">    // 返回当前指向</div><div class="line">    currPos: function () &#123;</div><div class="line">        return this.pos;</div><div class="line">    &#125;,</div><div class="line">    // 移动到某个指向</div><div class="line">    moveTo: function (position) &#123;</div><div class="line">        this.pos = position;</div><div class="line">    &#125;,</div><div class="line">    // 返回当前指向的元素</div><div class="line">    getElement: function () &#123;</div><div class="line">        return this.dataStore[this.pos];</div><div class="line">    &#125;,</div><div class="line">    // 判断给定值是否在列表中</div><div class="line">    contains: function (element) &#123;</div><div class="line">        // indexOf??</div><div class="line">        for (var i = 0; i &lt; this.dataStore.length;i++) &#123;</div><div class="line">            if (this.dataStore[i] === element) &#123;</div><div class="line">                return true;</div><div class="line">            &#125;</div><div class="line">            return false;</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    // this.pos 是否可以再次加1</div><div class="line">    hasNext () &#123;</div><div class="line">        return this.pos &lt; this.listSize - 1;</div><div class="line">    &#125;,</div><div class="line">    // this.pos 是否可以再次加1</div><div class="line">    hasPrev () &#123;</div><div class="line">        return this.pos &gt; 0;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></li>
+</ul>
+<p>测试结果：</p>
+<img src="/2017/03/08/数据结构-列表/1.jpeg" alt="1.jpeg" title="">
+<h3 id="使用迭代器访问列表"><a href="#使用迭代器访问列表" class="headerlink" title="使用迭代器访问列表"></a>使用迭代器访问列表</h3><ul>
+<li>front，end，prev，next，currPos实现了cList类的一个迭代器</li>
+<li>和数组索引的优点：<ul>
+<li>访问时不用关心底层数据结构（貌似也是数组？？）</li>
+<li>添加元素时，索引值不对了，只要更新列表，不更新迭代器</li>
+<li>可以用不同数据类型存储方式实现，访问元素的api是统一的<br>-（ ppppps：实在是不理解）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 迭代器访问</span></div><div class="line"><span class="comment">// 前向后遍历列表</span></div><div class="line"><span class="keyword">for</span> (names.front(); names.currPos() &lt; names.length() - <span class="number">1</span>; names.next()) &#123;</div><div class="line">    <span class="built_in">console</span>.log(names.getElement());</div><div class="line">&#125;</div><div class="line"><span class="comment">// 上面的叫迭代器遍历，下面的叫什么？？</span></div><div class="line">names.front();</div><div class="line"><span class="keyword">while</span> (names.hasNext()) &#123;</div><div class="line">    <span class="built_in">console</span>.log(names.getElement());</div><div class="line">    names.next();</div><div class="line">&#125;</div><div class="line"><span class="comment">// 疑问：当列表的listSize和pos的位置不符的时候怎么处理，好奇怪？？</span></div><div class="line"><span class="comment">// 后向前遍历</span></div><div class="line"><span class="keyword">for</span> (names.end(); names.currPos() &gt; <span class="number">0</span>; names.prev()) &#123;</div><div class="line">    <span class="built_in">console</span>.log(names.getElement());</div><div class="line">&#125;</div><div class="line"><span class="comment">// </span></div><div class="line">names.end();</div><div class="line"><span class="keyword">while</span> (names.hasPrev()) &#123;</div><div class="line">    <span class="built_in">console</span>.log(names.getElement());</div><div class="line">    names.prev();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/读书笔记/" rel="tag"># 读书笔记</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/08/数据结构-准备/" rel="next" title="数据结构-准备">
+                <i class="fa fa-chevron-left"></i> 数据结构-准备
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/10/数据结构-栈/" rel="prev" title="数据结构-栈">
+                数据结构-栈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/08/数据结构-列表/"
+           data-title="数据结构-列表" data-url="http://yoursite.com/2017/03/08/数据结构-列表/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/photo.jpeg"
+               alt="Zi Yun" />
+          <p class="site-author-name" itemprop="name">Zi Yun</p>
+           
+              <p class="site-description motion-element" itemprop="description">ziyun‘s blog | 前端 | JavaScript | webpack | CSS</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#chapter-3-列表"><span class="nav-number">1.</span> <span class="nav-text">chapter-3 列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#适合列表的数据结构"><span class="nav-number">1.1.</span> <span class="nav-text">适合列表的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用迭代器访问列表"><span class="nav-number">1.2.</span> <span class="nav-text">使用迭代器访问列表</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zi Yun</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zyziyun"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
